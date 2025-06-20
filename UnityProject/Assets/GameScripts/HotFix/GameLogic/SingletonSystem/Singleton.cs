@@ -8,7 +8,7 @@ namespace GameLogic
     /// <typeparam name="T">子类类型。</typeparam>
     public abstract class Singleton<T> : ISingleton where T : Singleton<T>, new()
     {
-        protected static T _instance = default(T);
+        private static T _instance;
 
         public static T Instance
         {

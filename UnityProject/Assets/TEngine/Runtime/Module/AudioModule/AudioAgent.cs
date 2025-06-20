@@ -69,7 +69,7 @@ namespace TEngine
         {
             set
             {
-                if (_source != null)
+                if (_source)
                 {
                     _volume = value;
                     _source.volume = _volume;

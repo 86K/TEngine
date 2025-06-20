@@ -20,7 +20,7 @@ namespace Launcher
         public static void Initialize()
         {
             _uiRoot = GameObject.Find("UIRoot/UICanvas")?.transform;
-            if (_uiRoot == null)
+            if (!_uiRoot)
             {
                 Debug.LogError("Failed to Find UIRoot. Please check the resource path");
                 return;
