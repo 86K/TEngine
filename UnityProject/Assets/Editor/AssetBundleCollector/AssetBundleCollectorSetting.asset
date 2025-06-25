@@ -89,6 +89,19 @@ MonoBehaviour:
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
+    - GroupName: Fonts
+      GroupDesc: 
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/AssetRaw/Fonts
+        CollectorGUID: 2473375c9ee163a4b861278b38091455
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
     - GroupName: Materials
       GroupDesc: 
       AssetTags: 
@@ -122,27 +135,6 @@ MonoBehaviour:
       Collectors:
       - CollectPath: Assets/AssetRaw/UI
         CollectorGUID: 27e87d83814156648b58f380b834e046
-        CollectorType: 0
-        AddressRuleName: AddressByFileName
-        PackRuleName: PackDirectory
-        FilterRuleName: CollectAll
-        AssetTags: 
-        UserData: 
-    - GroupName: UIRaw
-      GroupDesc: 
-      AssetTags: 
-      ActiveRuleName: EnableGroup
-      Collectors:
-      - CollectPath: Assets/AssetRaw/UIRaw/Atlas
-        CollectorGUID: 6d11fa91acc253840a648b58f23db139
-        CollectorType: 0
-        AddressRuleName: AddressByFileName
-        PackRuleName: PackDirectory
-        FilterRuleName: CollectAll
-        AssetTags: 
-        UserData: 
-      - CollectPath: Assets/AssetRaw/UIRaw/Raw
-        CollectorGUID: 6bc134b912ac6bb4399ea1bec4c11636
         CollectorType: 0
         AddressRuleName: AddressByFileName
         PackRuleName: PackDirectory
