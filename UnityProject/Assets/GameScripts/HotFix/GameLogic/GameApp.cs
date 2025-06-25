@@ -28,8 +28,7 @@ public partial class GameApp
     private static void StartGameLogic()
     {
         /* 开始游戏逻辑，打开第一个界面 */
-        GameEvent.Get<ILoginUI>().ShowLoginUI();
-        GameModule.UI.ShowUIAsync<BattleMainUI>();
+        GameModule.UI.ShowUIAsync<LoginUI>();
     }
     
     private static void Release()

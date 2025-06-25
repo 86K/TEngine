@@ -89,19 +89,6 @@ MonoBehaviour:
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
-    - GroupName: Fonts
-      GroupDesc: 
-      AssetTags: 
-      ActiveRuleName: EnableGroup
-      Collectors:
-      - CollectPath: Assets/AssetRaw/Fonts
-        CollectorGUID: 2473375c9ee163a4b861278b38091455
-        CollectorType: 0
-        AddressRuleName: AddressByFileName
-        PackRuleName: PackDirectory
-        FilterRuleName: CollectAll
-        AssetTags: 
-        UserData: 
     - GroupName: Materials
       GroupDesc: 
       AssetTags: 

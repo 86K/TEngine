@@ -6,7 +6,7 @@ using TEngine;
 namespace GameLogic
 {
     [Window(UILayer.UI)]
-    class LoginUI : UIWindow
+    class LoginUI : UIWindow, ILoginUI
     {
         #region 脚本工具生成的代码
         private InputField _inputAccount;
@@ -17,16 +17,14 @@ namespace GameLogic
             _inputAccount = FindChildComponent<InputField>("m_inputAccount");
             _inputPassword = FindChildComponent<InputField>("m_inputPassword");
             _btnLogin = FindChildComponent<Button>("m_btnLogin");
-            _btnLogin.onClick.AddListener(UniTask.UnityAction(OnClickLoginBtn));
+            _btnLogin.onClick.AddListener(OnClickSubmitButton);
         }
         #endregion
 
-        #region 事件
-        private async UniTaskVoid OnClickLoginBtn()
+        public void OnClickSubmitButton()
         {
-            await UniTask.Yield();
+            Close();
+            GameModule.UI.ShowUIAsync<ModuleMenuUI>();
         }
-        #endregion
-
     }
 }
