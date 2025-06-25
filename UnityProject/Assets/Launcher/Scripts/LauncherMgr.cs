@@ -29,7 +29,7 @@ namespace Launcher
             RegisterUI();
         }
 
-        public static void RegisterUI()
+        private static void RegisterUI()
         {
             UIDefine.RegisterUI(_uiList);
         }
@@ -151,8 +151,8 @@ namespace Launcher
             Action onCancel = null,
             Action onPackage = null)
         {
-            LauncherMgr.Show(UIDefine.UILoadTip, desc);
-            var ui = LauncherMgr.GetActiveUI(UIDefine.UILoadTip) as UILoadTip;
+            Show(UIDefine.UILoadTip, desc);
+            var ui = GetActiveUI(UIDefine.UILoadTip) as UILoadTip;
             if (ui == null)
             {
                 return;
@@ -177,8 +177,8 @@ namespace Launcher
         /// <param name="resId">资源ID。</param>
         public static void RefreshVersion(string appId, string resId)
         {
-            LauncherMgr.Show(UIDefine.UILoadUpdate);
-            var ui = LauncherMgr.GetActiveUI(UIDefine.UILoadUpdate) as UILoadUpdate;
+            Show(UIDefine.UILoadUpdate);
+            var ui = GetActiveUI(UIDefine.UILoadUpdate) as UILoadUpdate;
             if (ui == null)
             {
                 return;
@@ -193,9 +193,9 @@ namespace Launcher
         /// <param name="label">文本ID。</param>
         public static void UpdateUILabel(string label)
         {
-            LauncherMgr.Show(UIDefine.UILoadUpdate);
-            var ui = LauncherMgr.GetActiveUI(UIDefine.UILoadUpdate) as UILoadUpdate;
-            if (ui == null)
+            Show(UIDefine.UILoadUpdate);
+            var ui = GetActiveUI(UIDefine.UILoadUpdate) as UILoadUpdate;
+            if (!ui)
             {
                 return;
             }
@@ -209,9 +209,9 @@ namespace Launcher
         /// <param name="progress">当前进度。</param>
         public static void UpdateUIProgress(float progress)
         {
-            LauncherMgr.Show(UIDefine.UILoadUpdate);
-            var ui = LauncherMgr.GetActiveUI(UIDefine.UILoadUpdate) as UILoadUpdate;
-            if (ui == null)
+            Show(UIDefine.UILoadUpdate);
+            var ui = GetActiveUI(UIDefine.UILoadUpdate) as UILoadUpdate;
+            if (!ui)
             {
                 return;
             }

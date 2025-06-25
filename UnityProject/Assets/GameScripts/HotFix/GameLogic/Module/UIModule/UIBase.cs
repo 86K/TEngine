@@ -7,31 +7,31 @@ using UnityEngine;
 namespace GameLogic
 {
     /// <summary>
+    /// UI类型。
+    /// </summary>
+    public enum EUIType
+    {
+        /// <summary>
+        /// 类型无。
+        /// </summary>
+        None,
+
+        /// <summary>
+        /// 类型Windows。
+        /// </summary>
+        Window,
+
+        /// <summary>
+        /// 类型Widget。
+        /// </summary>
+        Widget,
+    }
+    
+    /// <summary>
     /// UI基类。
     /// </summary>
     public class UIBase
     {
-        /// <summary>
-        /// UI类型。
-        /// </summary>
-        public enum UIType
-        {
-            /// <summary>
-            /// 类型无。
-            /// </summary>
-            None,
-
-            /// <summary>
-            /// 类型Windows。
-            /// </summary>
-            Window,
-
-            /// <summary>
-            /// 类型Widget。
-            /// </summary>
-            Widget,
-        }
-
         /// <summary>
         /// 所属UI父节点。
         /// </summary>
@@ -91,7 +91,7 @@ namespace GameLogic
         /// <summary>
         /// UI类型。
         /// </summary>
-        public virtual UIType Type => UIType.None;
+        public virtual EUIType Type => EUIType.None;
 
         /// <summary>
         /// 资源是否准备完毕。
@@ -227,7 +227,7 @@ namespace GameLogic
         private static T FindChildComponentImp<T>(Transform transform, string path) where T : Component
         {
             var findTrans = transform.Find(path);
-            if (findTrans != null)
+            if (findTrans)
             {
                 return findTrans.gameObject.GetComponent<T>();
             }
@@ -496,14 +496,14 @@ namespace GameLogic
 
             for (int i = 0; i < tarNum; i++)
             {
-                T tmpT = null;
+                T tmpT;
                 if (i < listIcon.Count)
                 {
                     tmpT = listIcon[i];
                 }
                 else
                 {
-                    if (prefab == null)
+                    if (!prefab)
                     {
                         tmpT = await CreateWidgetByPathAsync<T>(parentTrans, assetPath);
                     }
@@ -554,7 +554,7 @@ namespace GameLogic
                 icon.OnDestroy();
                 icon.OnDestroyWidget();
                 ListChild.Remove(icon);
-                if (icon.gameObject != null)
+                if (icon.gameObject)
                 {
                     UnityEngine.Object.Destroy(icon.gameObject);
                 }

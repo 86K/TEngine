@@ -30,7 +30,7 @@ namespace GameLogic
 
         private GraphicRaycaster[] _childRaycaster;
 
-        public override UIType Type => UIType.Window;
+        public override EUIType Type => EUIType.Window;
 
         /// <summary>
         /// 窗口位置组件。
@@ -90,10 +90,8 @@ namespace GameLogic
                 {
                     return _canvas.sortingOrder;
                 }
-                else
-                {
-                    return 0;
-                }
+
+                return 0;
             }
 
             set
@@ -136,14 +134,12 @@ namespace GameLogic
         {
             get
             {
-                if (_canvas != null)
+                if (_canvas)
                 {
                     return _canvas.gameObject.layer == UIModule.WINDOW_SHOW_LAYER;
                 }
-                else
-                {
-                    return false;
-                }
+
+                return false;
             }
 
             set
@@ -180,14 +176,12 @@ namespace GameLogic
         {
             get
             {
-                if (_raycaster != null)
+                if (_raycaster)
                 {
                     return _raycaster.enabled;
                 }
-                else
-                {
-                    return false;
-                }
+
+                return false;
             }
 
             set

@@ -83,7 +83,7 @@ namespace Launcher
 
         public void InitConfigData(TextAsset asset)
         {
-            if (asset == null)
+            if (!asset)
                 return;
 
             TextMode loadConfig = JsonUtility.FromJson<TextMode>(asset.text);

@@ -3,7 +3,7 @@ using UnityEditor;
 
 public static class TEngineUISettingsProvider  
 {  
-    [MenuItem("TEngine/Settings/TEngineUISettings", priority = -1)]
+    [MenuItem("TEngine/Settings/TEngine UISettings", priority = -1)]
     public static void OpenSettings() => SettingsService.OpenProjectSettings("Project/TEngine/UISettings");
     
     private const string SettingsPath = "Project/TEngine/UISettings";  

@@ -4,7 +4,6 @@ using GameLogic;
 using TEngine;
 #pragma warning disable CS0436
 
-
 /// <summary>
 /// 游戏App。
 /// </summary>
@@ -28,6 +27,7 @@ public partial class GameApp
     
     private static void StartGameLogic()
     {
+        /* 开始游戏逻辑，打开第一个界面 */
         GameEvent.Get<ILoginUI>().ShowLoginUI();
         GameModule.UI.ShowUIAsync<BattleMainUI>();
     }

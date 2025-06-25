@@ -30,7 +30,7 @@ namespace GameLogic
         /// <summary>
         /// UI类型。
         /// </summary>
-        public override UIType Type => UIType.Widget;
+        public override EUIType Type => EUIType.Widget;
 
         /// <summary>
         /// 所属的窗口。
@@ -42,7 +42,7 @@ namespace GameLogic
                 var parentUI = base._parent;
                 while (parentUI != null)
                 {
-                    if (parentUI.Type == UIType.Window)
+                    if (parentUI.Type == EUIType.Window)
                     {
                         return parentUI as UIWindow;
                     }

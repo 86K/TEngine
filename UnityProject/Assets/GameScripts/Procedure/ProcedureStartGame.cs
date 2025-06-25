@@ -5,6 +5,9 @@ using TEngine;
 
 namespace Procedure
 {
+    /// <summary>
+    /// 游戏开始流程。
+    /// </summary>
     public class ProcedureStartGame : ProcedureBase
     {
         public override bool UseNativeDialog { get; }

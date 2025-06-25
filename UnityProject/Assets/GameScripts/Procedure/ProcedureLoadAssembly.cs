@@ -123,6 +123,7 @@ namespace Procedure
 
         private void AllAssemblyLoadComplete()
         {
+            /* 切换到开始游戏流程，会隐藏所有热更UI。 */
             ChangeState<ProcedureStartGame>(_procedureOwner);
 #if UNITY_EDITOR
             _mainLogicAssembly = GetMainLogicAssembly();
@@ -146,6 +147,7 @@ namespace Procedure
                 return;
             }
             object[] objects = new object[] { new object[] { _hotfixAssemblyList } };
+            /* 所有的程序集加载完毕之后，通过反射的方式调用GameApp.Entrance方法。 */
             entryMethod.Invoke(appType, objects);
         }
 
@@ -185,7 +187,7 @@ namespace Procedure
         private void LoadAssetSuccess(TextAsset textAsset)
         {
             _loadAssetCount--;
-            if (textAsset == null)
+            if (!textAsset)
             {
                 Log.Warning($"Load Assembly failed.");
                 return;

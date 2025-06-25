@@ -49,7 +49,7 @@ namespace GameLogic
         protected override void OnInit()
         {
             var uiRoot = GameObject.Find("UIRoot");
-            if (uiRoot != null)
+            if (uiRoot)
             {
                 _instanceRoot = uiRoot.GetComponentInChildren<Canvas>()?.transform;
                 _uiCamera = uiRoot.GetComponentInChildren<Camera>();

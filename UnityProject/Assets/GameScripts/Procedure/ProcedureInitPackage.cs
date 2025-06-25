@@ -16,13 +16,9 @@ namespace Procedure
     {
         public override bool UseNativeDialog { get; }
 
-        private ProcedureOwner _procedureOwner;
-
         protected override void OnEnter(ProcedureOwner procedureOwner)
         {
             base.OnEnter(procedureOwner);
-
-            _procedureOwner = procedureOwner;
 
             //Fire Forget立刻触发UniTask初始化Package
             InitPackage(procedureOwner).Forget();
