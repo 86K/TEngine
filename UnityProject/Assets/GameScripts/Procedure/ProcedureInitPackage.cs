@@ -2,6 +2,7 @@
 using Cysharp.Threading.Tasks;
 using Launcher;
 using TEngine;
+using TMPro;
 using UnityEngine;
 using YooAsset;
 using ProcedureOwner = TEngine.IFsm<TEngine.IProcedureModule>;
@@ -32,6 +33,12 @@ namespace Procedure
 
                 if (initializationOperation.Status == EOperationStatus.Succeed)
                 {
+                    // // 新增：添加加载字体，避免在某些平台时显示不出来
+                    // var fontHandle = YooAssets.LoadAssetAsync<TMP_FontAsset>("SourceHanSansCN-Regular SDF");
+                    // await fontHandle.Task;
+                    // var fontAsset = fontHandle.AssetObject as TMP_FontAsset;
+                    // Debug.Log($"思源黑体加载成功？：{fontAsset}");
+                    
                     //热更新阶段文本初始化
                     LoadText.Instance.InitConfigData(null);
 
