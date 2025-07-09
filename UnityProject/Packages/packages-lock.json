@@ -1,10 +1,11 @@
 {
   "dependencies": {
     "com.code-philosophy.hybridclr": {
-      "version": "file:com.code-philosophy.hybridclr",
+      "version": "https://gitee.com/focus-creative-games/hybridclr_unity.git",
       "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
+      "source": "git",
+      "dependencies": {},
+      "hash": "ee7af5c5926c12402b3ccd121408646f1cf3128f"
     },
     "com.cysharp.unitask": {
       "version": "file:UniTask",
@@ -31,7 +32,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.rider": {
-      "version": "3.0.36",
+      "version": "3.0.34",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -53,15 +54,6 @@
       "depth": 0,
       "source": "registry",
       "dependencies": {},
-      "url": "https://packages.unity.com"
-    },
-    "com.unity.inputsystem": {
-      "version": "1.11.2",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.modules.uielements": "1.0.0"
-      },
       "url": "https://packages.unity.com"
     },
     "com.unity.nuget.newtonsoft-json": {
