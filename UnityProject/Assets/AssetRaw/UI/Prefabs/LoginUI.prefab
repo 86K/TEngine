@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &7449648714639534430
+--- !u!1 &5667137449414676235
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,23 +8,23 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 6290478044930705181}
-  - component: {fileID: 7182000929394606329}
-  - component: {fileID: 2940226907414165280}
+  - component: {fileID: 5611922707101130150}
+  - component: {fileID: 7226962916585245550}
+  - component: {fileID: 5058624457508107881}
   m_Layer: 5
-  m_Name: Test
+  m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &6290478044930705181
+--- !u!224 &5611922707101130150
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7449648714639534430}
+  m_GameObject: {fileID: 5667137449414676235}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -32,26 +32,26 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 7590624233116553169}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -193}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: -960, y: 25}
+  m_SizeDelta: {x: 1900, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &7182000929394606329
+--- !u!222 &7226962916585245550
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7449648714639534430}
+  m_GameObject: {fileID: 5667137449414676235}
   m_CullTransparentMesh: 1
---- !u!114 &2940226907414165280
+--- !u!114 &5058624457508107881
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7449648714639534430}
+  m_GameObject: {fileID: 5667137449414676235}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
@@ -65,10 +65,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "WebGL\u6D4B\u8BD5"
+  m_text: Made by itsxwz.
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ed13373813287e74a8c93d2ca98489bc, type: 2}
-  m_sharedMaterial: {fileID: -2980987647640408796, guid: ed13373813287e74a8c93d2ca98489bc, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: fe8bf5937ede7604ea289b07ee80286c, type: 2}
+  m_sharedMaterial: {fileID: -3612125361556483852, guid: fe8bf5937ede7604ea289b07ee80286c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -99,8 +99,8 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
+  m_HorizontalAlignment: 4
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -200,7 +200,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 3eff254913132f445a79094ec4a2f282, type: 3}
+    m_Font: {fileID: 12800000, guid: 0f17856bc63229c4e9ec74fd92fbf8a6, type: 3}
     m_FontSize: 28
     m_FontStyle: 2
     m_BestFit: 0
@@ -279,7 +279,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 3eff254913132f445a79094ec4a2f282, type: 3}
+    m_Font: {fileID: 12800000, guid: 0f17856bc63229c4e9ec74fd92fbf8a6, type: 3}
     m_FontSize: 28
     m_FontStyle: 0
     m_BestFit: 0
@@ -898,7 +898,7 @@ RectTransform:
   - {fileID: 7590624232596026019}
   - {fileID: 7590624232011094235}
   - {fileID: 7590624231809635996}
-  - {fileID: 6290478044930705181}
+  - {fileID: 5611922707101130150}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
