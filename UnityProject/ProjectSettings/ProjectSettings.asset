@@ -803,7 +803,7 @@ PlayerSettings:
     Stadia: UNITY_POST_PROCESSING_STACK_V2;TextMeshPro
     Standalone: ENABLE_LOG;TextMeshPro
     VisionOS: TextMeshPro
-    WebGL: UNITY_POST_PROCESSING_STACK_V2;TextMeshPro;ENABLE_LOG
+    WebGL: UNITY_POST_PROCESSING_STACK_V2;TextMeshPro;ENABLE_LOG;ODIN_VALIDATOR;ODIN_VALIDATOR_3_1;ODIN_INSPECTOR;ODIN_INSPECTOR_3;ODIN_INSPECTOR_3_1
     Windows Store Apps: UNITY_POST_PROCESSING_STACK_V2;TextMeshPro;ENABLE_LOG
     XboxOne: UNITY_POST_PROCESSING_STACK_V2;TextMeshPro
     iPhone: ENABLE_LOG;TextMeshPro
@@ -912,7 +912,7 @@ PlayerSettings:
   hmiLogStartupTiming: 0
   hmiCpuConfiguration: 
   apiCompatibilityLevel: 6
-  activeInputHandler: 0
+  activeInputHandler: 2
   windowsGamepadBackendHint: 0
   cloudProjectId: 
   framebufferDepthMemorylessMode: 0
