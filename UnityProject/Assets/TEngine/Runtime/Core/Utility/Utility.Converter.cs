@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Text;
 
 namespace TEngine
@@ -829,6 +830,22 @@ namespace TEngine
                 }
 
                 return encoding.GetString(value, startIndex, length);
+            }
+
+            /// <summary>
+            /// 通过枚举定义名称，得到一个枚举值。
+            /// </summary>
+            /// <param name="value">枚举定义的名称。</param>
+            /// <typeparam name="T">枚举类型。</typeparam>
+            /// <returns>枚举值。</returns>
+            public static T GetEnum<T>(string value) where T : struct, Enum
+            {
+                if (!string.IsNullOrEmpty(value) && Enum.TryParse(value.Trim(), out T result))
+                {
+                    return result;
+                }
+
+                return Enum.GetValues(typeof(T)).Cast<T>().First();
             }
         }
     }

@@ -11,7 +11,7 @@ namespace TEngine
         private const int STRING_BUILDER_CAPACITY = 1024;
 
         [ThreadStatic]
-        private static StringBuilder s_CachedStringBuilder = null;
+        private static StringBuilder s_CachedStringBuilder;
 
         /// <summary>
         /// 获取格式化字符串。
