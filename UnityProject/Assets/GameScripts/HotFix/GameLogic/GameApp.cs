@@ -29,8 +29,9 @@ public partial class GameApp
     
     private static void StartGameLogic()
     {
+        Debug.Log($" start game logic");
         /* 开始游戏逻辑，打开第一个界面 */
-        GameModule.UI.ShowUIAsync<LoginUI>();
+        GameModule.UI.ShowUIAsync<UIMain>();
     }
     
     private static void Release()
