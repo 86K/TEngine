@@ -56,7 +56,7 @@ namespace Fusion
 
         private void OnGUI()
         {
-            if (_fpsText != null || _tmpText != null)
+            if (_fpsText || _tmpText)
                 return;
 
             GUIStyle style = new GUIStyle(GUI.skin.box)
@@ -114,7 +114,7 @@ namespace Fusion
 
         public static void DrawLine(Vector2 pointA, Vector2 pointB, Color color, float width)
         {
-            if (_lineTex == null)
+            if (!_lineTex)
             {
                 _lineTex = new Texture2D(1, 1);
                 _lineTex.SetPixel(0, 0, Color.white);
