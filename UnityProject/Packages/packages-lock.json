@@ -13,6 +13,15 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "com.fantasy.unity": {
+      "version": "2026.0.1006",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.nuget.newtonsoft-json": "3.2.1"
+      },
+      "url": "https://package.openupm.com"
+    },
     "com.tuyoogame.yooasset": {
       "version": "file:YooAsset",
       "depth": 0,
