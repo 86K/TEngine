@@ -45,3 +45,24 @@ GameScripts/HotFix/
 - [ui-prefab-builder.md](skills/tengine-dev/references/ui-prefab-builder.md) - UI Prefab 拼接
 - [scene-gameobject.md](skills/tengine-dev/references/scene-gameobject.md) - 场景/GameObject 操作
 - [script-asset-workflow.md](skills/tengine-dev/references/script-asset-workflow.md) - 脚本/资源管理
+
+---
+
+## 🔧 自我优化机制
+
+### 问题记录
+当在开发过程中发现框架问题时，需要记录到 `memory/` 目录：
+- 创建 `memory/problem_记录日期.md` 文件
+- 记录问题现象、原因分析、解决方案
+
+### 文档同步
+当发现文档与代码不一致时，使用 skill `wiki-synchelper` 同步：
+```bash
+/wiki:sync
+```
+
+### 优化触发条件
+- 代码实现与 wiki 文档描述不符
+- 发现框架潜在问题或 bug
+- 文档缺失或过时
+- 规范需要更新
