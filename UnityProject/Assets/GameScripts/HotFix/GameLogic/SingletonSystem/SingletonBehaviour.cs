@@ -30,7 +30,19 @@ namespace GameLogic
             return false;
         }
 
+        /// <summary>
+        /// 单例挂载的MonoBehaviour加载出来之后（Awake）调用此方法。
+        /// </summary>
         protected virtual void OnLoad()
+        {
+            
+        }
+
+        /// <summary>
+        /// 提供外部调用的初始化方法。
+        /// 不需要把单例挂载，调用方法时会自动创建一个实例。
+        /// </summary>
+        public virtual void Initialize()
         {
         }
 
@@ -45,10 +57,7 @@ namespace GameLogic
         /// <summary>
         /// 判断对象是否有效
         /// </summary>
-        public static bool IsValid
-        {
-            get { return _instance != null; }
-        }
+        public static bool IsValid => _instance != null;
 
         public static T Active()
         {

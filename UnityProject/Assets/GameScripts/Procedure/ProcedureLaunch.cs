@@ -24,6 +24,7 @@ namespace Procedure
         {
             base.OnEnter(procedureOwner);
             
+            // NOTICE：启动流程中进行热更新UI初始化
             //热更新UI初始化
             LauncherMgr.Initialize();
 

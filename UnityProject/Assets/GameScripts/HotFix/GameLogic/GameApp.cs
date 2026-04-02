@@ -1,12 +1,14 @@
 using System.Collections.Generic;
 using System.Reflection;
+using Fantasy;
 using GameLogic;
 #if ENABLE_OBFUZ
 using Obfuz;
 #endif
 using TEngine;
-#pragma warning disable CS0436
+using Log = TEngine.Log;
 
+#pragma warning disable CS0436
 
 /// <summary>
 /// 游戏App。
@@ -35,8 +37,11 @@ public partial class GameApp
     
     private static void StartGameLogic()
     {
-        // GameEvent.Get<ILoginUI>().ShowLoginUI();
-        GameModule.UI.ShowUIAsync<BattleMainUI>();
+        // 初始化项目
+        GameManager.Instance.Initialize();
+        
+        // 打开第一个界面
+        GameModule.UI.ShowUIAsync<UILogin>();
     }
     
     private static void Release()
