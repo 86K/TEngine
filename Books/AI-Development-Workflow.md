@@ -1,8 +1,8 @@
 # AI 开发工作流指南
 
-> 本文档介绍如何结合 openspec 和 tengine-dev Skills 进行 TEngine 项目的 AI 辅助开发。
+> 本文档介绍 TEngine 项目完整的 AI 辅助开发工作流，包含 wiki-query-agent 上下文隔离架构、任务等级分级机制、会话缓存策略，以及与 openspec / tengine-dev 的集成使用方式。
 
-**更新时间**: 2026-03-05
+**更新时间**: 2026-04-01
 
 ---
 
@@ -69,6 +69,13 @@
   - [必需工具](#必需工具)
   - [可选工具](#可选工具)
 - [概述](#概述)
+- [wiki-query-agent 工作流](#wiki-query-agent-工作流)
+  - [整体流程总览](#整体流程总览)
+  - [时序图一：上下文隔离架构](#时序图一上下文隔离架构)
+  - [时序图二：会话内缓存机制](#时序图二会话内缓存机制)
+  - [时序图三：并行多主题查询](#时序图三并行多主题查询)
+  - [时序图四：自愈闭环](#时序图四自愈闭环)
+  - [任务等级分级说明](#任务等级分级说明)
 - [快速开始](#快速开始)
 - [openspec 工作流](#openspec-工作流)
 - [tengine-dev Skills](#tengine-dev-skills)
@@ -91,16 +98,205 @@
 
 ## 概述
 
-TEngine 项目提供了一套完整的 AI 辅助开发工作流，结合了：
+TEngine 项目提供了一套完整的 AI 辅助开发工作流，由以下核心组件构成：
 
+- **wiki-query-agent**: 上下文隔离的 subagent，专职处理 wiki 文档查询，保护主 Agent 上下文窗口
+- **任务等级分级（L1-L4）**: 按任务复杂度决定查询深度，简单任务零开销
+- **会话内缓存**: 同一主题在同一会话中只查询一次，后续任务复用
+- **自愈闭环**: 主动检测 wiki 与代码冲突，自动触发文档同步
 - **openspec**: 规范驱动的变更管理工具
 - **tengine-dev**: Claude Code 专用的 TEngine 开发技能
 - **Unity-MCP**: Unity Editor 自动化操作工具
 
-这套工作流可以帮助开发者：
-- 使用规范化的流程管理需求和变更
-- 获取专业的 TEngine 开发指导
-- 自动化 Unity Editor 操作
+---
+
+## wiki-query-agent 工作流
+
+### 整体流程总览
+
+```mermaid
+flowchart TD
+    A([用户发起任务]) --> B{判断任务等级}
+
+    B -->|L1 简单\ntypo/注释/日志| C[直接编写代码]
+    B -->|L2 调用\n单一 API 修改| D[轻量查询\n只查该 API]
+    B -->|L3 功能\n新功能/跨文件| E[全量查询\n相关模块规范]
+    B -->|L4 架构\n系统设计/重构| F[并行多主题查询]
+
+    D --> G{会话缓存命中?}
+    E --> G
+    F --> G
+
+    G -->|命中| H[复用已有规范摘要]
+    G -->|未命中| I[启动 wiki-query-agent\nsubagent 查询]
+
+    I --> J[subagent 读取 repowiki/\n处理文档内容]
+    J --> K[返回精华规范摘要]
+    H --> L[输出代码/方案]
+    K --> L
+    C --> L
+
+    L --> M{规范与代码冲突?}
+    M -->|有冲突| N[标注冲突点\n触发 /wiki:sync]
+    M -->|无冲突| O([任务完成])
+    N --> O
+```
+
+---
+
+### 时序图一：上下文隔离架构
+
+> **核心优势**：wiki 文档全部在 subagent 独立上下文中处理，主 Agent 只接收精华摘要，上下文窗口始终干净。
+
+```mermaid
+sequenceDiagram
+    participant U as 用户
+    participant M as 主 Agent (Claude)
+    participant S as wiki-query-agent (subagent)
+    participant W as repowiki/zh/content/
+
+    U->>M: 请实现背包 UI
+    Note over M: 判断等级: L3 功能
+    M->>S: 启动 subagent<br/>查询: UIWindow规范 + 资源管理规范
+
+    activate S
+    S->>W: 读取 ui-development.md
+    S->>W: 读取 resource-management.md
+    S->>W: 读取 event-system.md
+    Note over S: 处理大量文档内容<br/>提炼关键规范
+    S-->>M: 返回精华摘要<br/>（~500字，非原始文档）
+    deactivate S
+
+    Note over M: 主 Agent 上下文保持干净<br/>只增加了摘要，未增加文档原文
+    M->>M: 声明已查询主题
+    M-->>U: 输出符合规范的代码
+```
+
+---
+
+### 时序图二：会话内缓存机制
+
+> **核心优势**：同一会话中相同主题只查询一次，后续任务直接复用，避免重复 token 消耗。
+
+```mermaid
+sequenceDiagram
+    participant U as 用户
+    participant M as 主 Agent
+    participant S as wiki-query-agent
+    participant C as 会话缓存
+
+    U->>M: 任务①: 实现登录界面 UI
+    M->>S: 查询 UIWindow 规范
+    S-->>M: 返回 UIWindow 规范摘要
+    M->>C: 缓存: UIWindow 规范 ✅
+    M-->>U: 输出登录界面代码
+
+    U->>M: 任务②: 实现设置界面 UI
+    M->>C: 检查缓存: UIWindow 规范
+    C-->>M: 命中缓存 ✅ 直接复用
+    Note over M: 无需重启 subagent<br/>零等待，零额外 token
+    M-->>U: 输出设置界面代码
+
+    U->>M: 任务③: 设置界面添加音效按钮
+    M->>C: 检查缓存: UIWindow ✅ / Audio ❌
+    C-->>M: UIWindow 命中，Audio 未命中
+    M->>S: 仅补充查询 AudioModule 规范
+    S-->>M: 返回 Audio 规范摘要
+    M->>C: 缓存: Audio 规范 ✅
+    M-->>U: 输出音效按钮代码
+```
+
+---
+
+### 时序图三：并行多主题查询（L4 架构任务）
+
+> **核心优势**：架构级任务并行启动多个 subagent，汇总后统一决策，大幅减少串行等待。
+
+```mermaid
+sequenceDiagram
+    participant U as 用户
+    participant M as 主 Agent
+    participant S1 as wiki-query-agent #1
+    participant S2 as wiki-query-agent #2
+    participant S3 as wiki-query-agent #3
+
+    U->>M: 设计战斗系统架构<br/>涉及: UI + 事件 + FSM + 资源
+
+    Note over M: 判断等级: L4 架构<br/>并行启动 3 个 subagent
+
+    par 并行查询
+        M->>S1: 查询 UIWindow + UIWidget 规范
+        M->>S2: 查询 GameEvent 事件系统规范
+        M->>S3: 查询 FSM 状态机 + 资源加载规范
+    end
+
+    S1-->>M: UI 规范摘要
+    S2-->>M: 事件系统摘要
+    S3-->>M: FSM + 资源摘要
+
+    Note over M: 汇总三份摘要<br/>统一架构决策
+    M-->>U: 输出完整战斗系统架构方案
+```
+
+---
+
+### 时序图四：自愈闭环（文档自动同步）
+
+> **核心优势**：AI 主动检测 wiki 与代码的不一致，自动触发同步，形成持续改进的自愈循环。
+
+```mermaid
+sequenceDiagram
+    participant M as 主 Agent
+    participant S as wiki-query-agent
+    participant W as repowiki/
+    participant Code as 项目代码
+    participant Mem as .claude/memory/
+
+    M->>S: 查询某 API 规范
+    S-->>M: wiki 描述: API_X(param1, param2)
+
+    M->>Code: 读取实际代码实现
+    Code-->>M: 实际签名: API_X(param1, param2, param3)
+
+    Note over M: 检测到冲突!<br/>wiki 描述与代码不符
+
+    M->>Mem: 记录 problem_2026-04-01.md<br/>冲突详情 + 分析
+    M->>W: 触发 /wiki:sync<br/>更新 wiki 文档
+
+    Note over W: wiki 同步完成<br/>下次查询将返回正确规范
+
+    M-->>U: 输出代码，并标注已修正文档冲突
+```
+
+---
+
+### 任务等级分级说明
+
+| 等级 | 判断标准 | wiki 查询策略 | 声明步骤 |
+|------|---------|-------------|---------|
+| **L1 简单** | typo 修正、注释修改、日志输出、单行变量改名 | ❌ 跳过查询 | ❌ 跳过 |
+| **L2 调用** | 调用已知 API、单一模块的局部修改 | ✅ 轻量查询（只查该 API） | 可选 |
+| **L3 功能** | 新功能开发、跨文件修改、新增 UI/资源/事件逻辑 | ✅ 全量查询 | ✅ 必须 |
+| **L4 架构** | 模块设计、系统重构、多模块协作、架构决策 | ✅ 并行多主题查询 | ✅ 必须 |
+
+> **判断原则**：宁可高估等级，不可低估——不确定时上调一级。
+
+### 五步工作流快速参考
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                   TEngine AI 工作流                      │
+├─────────────────────────────────────────────────────────┤
+│  Step 0  判断任务等级 L1/L2/L3/L4                        │
+│  Step 1  按等级决定查询深度（缓存命中则跳过）              │
+│  Step 2  wiki-query-agent 独立处理文档，返回摘要          │
+│  Step 3  L3/L4 声明已查询主题 + 关键规范摘要             │
+│  Step 4  基于规范输出代码/方案                            │
+│  Step 5  检测冲突 → 自动触发 /wiki:sync（如有）           │
+└─────────────────────────────────────────────────────────┘
+```
+
+详细规范请参考：[CLAUDE.md](../UnityProject/CLAUDE.md)
 
 ---
 
