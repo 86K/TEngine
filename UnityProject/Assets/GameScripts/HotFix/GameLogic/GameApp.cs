@@ -40,7 +40,7 @@ public partial class GameApp
         // 初始化项目
         GameManager.Instance.Initialize();
         
-        // 打开第一个界面
+        // NOTICE：打开第一个界面
         GameModule.UI.ShowUIAsync<UILogin>();
     }
     

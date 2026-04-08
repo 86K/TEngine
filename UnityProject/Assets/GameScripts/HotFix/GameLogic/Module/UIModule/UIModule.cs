@@ -16,7 +16,8 @@ namespace GameLogic
     {
         // 核心字段
         private static Transform _instanceRoot = null;          // UI根节点变换组件
-        private bool _enableErrorLog = true;                    // 是否启用错误日志
+        // NOTICE：是否启用LogUI（框架默认是true）
+        private bool _enableErrorLog = false;                    // 是否启用错误日志
         private Camera _uiCamera = null;                        // UI专用摄像机
         private readonly List<UIWindow> _uiStack = new List<UIWindow>(128); // 窗口堆栈
         private ErrorLogger _errorLogger;                       // 错误日志记录器
