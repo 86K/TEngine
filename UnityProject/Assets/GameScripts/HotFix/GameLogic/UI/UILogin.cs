@@ -1,31 +1,10 @@
-﻿using TMPro;
-using Cysharp.Threading.Tasks;
-using Fantasy.Event;
+﻿using Cysharp.Threading.Tasks;
+using Fantasy;
 using UnityEngine;
-using UnityEngine.UI;
-using TEngine;
+using Log = TEngine.Log;
 
 namespace GameLogic
 {
-    /// <summary>
-    /// 定义一个结构体的测试事件
-    /// </summary>
-    public struct TestEvent
-    {
-        public string Test;
-    }
-
-    /// <summary>
-    /// 订阅该结构体类型的测试事件
-    /// </summary>
-    public class OnTestEvent : EventSystem<TestEvent>
-    {
-        protected override void Handler(TestEvent self)
-        {
-            Log.Info($"接收到了TestEvent事件：{self.Test}");
-        }
-    }
-    
 	[Window(UILayer.UI, location : "UILogin")]
 	public partial class UILogin
 	{
@@ -33,24 +12,18 @@ namespace GameLogic
         {
             base.OnCreate();
             
-            // 测试fantasy的定时器
-            // 1.Net定时器
-            FantasyManager.Instance.NetSchedulerTimer.OnceTimer(1500, () =>
-            {
-                Log.Info($"测试Fantasy的Net定时器，1.5秒后执行一次");
-            });
+            // 这个时候FantasyRuntime已经初始化框架了，可以使用它的Instance了
+            Log.Info($"{Fantasy.Runtime.Session.RemoteEndPoint} ");
+        }
 
-            // 2.Unity定时器
-            FantasyManager.Instance.UnitySchedulerTimer.RepeatedTimer(2000, () =>
+        protected override void OnUpdate()
+        {
+            base.OnUpdate();
+
+            if (Input.GetKeyDown(KeyCode.Space))
             {
-                Log.Info($"测试Fantasy的Unity定时器，每隔2秒后执行一次");
-            });
-            
-            // 测试fantasy的事件系统
-            FantasyManager.Instance.Event.Publish(new TestEvent()
-            {
-                Test = "Hello World!"
-            });
+                GameModule.UI.ShowUIAsync<UITip>("测试UITip功能，所以要凑一段很长的文字内容，去测试它的自适应文字内容，动态适应底图的高度，哈哈哈", 2);
+            }
         }
 
         #region 事件
@@ -62,9 +35,18 @@ namespace GameLogic
 
             if (string.IsNullOrEmpty(account))
             {
-                
+                GameModule.UI.ShowUIAsync<UITip>("账号不能为空");
+                return;
             }
             
+            if (string.IsNullOrEmpty(password))
+            {
+                GameModule.UI.ShowUIAsync<UITip>("密码不能为空");
+                return;
+            }
+            
+            var loginResponse = await FantasyManager.Instance.Session.C2G_LoginRequest(account, password);
+            Log.Info($"登陆结果，code：{loginResponse.code} result：{loginResponse.result}  id：{loginResponse.userId}");
 			await UniTask.Yield();
 		}
 

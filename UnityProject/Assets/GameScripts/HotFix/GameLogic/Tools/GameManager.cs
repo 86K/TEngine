@@ -1,7 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿using System.IO;
+using Newtonsoft.Json;
 using TEngine;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace GameLogic
 {
@@ -19,11 +19,17 @@ namespace GameLogic
     /// </summary>
     public class GameManager : SingletonBehaviour<GameManager>
     {
-        [HideInInspector]
-        public Config Config;
+        // 配置数据给一些必要的默认值
+        public static Config Config = new()
+        {
+            remoteIp = "127.0.0.1",
+            remotePort = 8081,
+        };
         
         public override void Initialize()
         {
+            base.Initialize();
+            
             // 加载项目配置
             LoadConfig();
            
@@ -33,17 +39,22 @@ namespace GameLogic
 
         private void LoadConfig()
         {
-            Log.Info($"加载项目配置");
-
-            var configTxt = GameModule.Resource.LoadAsset<Text>("Config.json");
-            if (configTxt == null)
+            var folderPath = Application.streamingAssetsPath + "/Configs";
+            if (!Directory.Exists(folderPath))
             {
-                Log.Info($"AssetRaw/Configs/Config.json不存在，请检查");
+                Log.Info($"配置文件夹不存在：{folderPath}");
+                return;
             }
-            else
+            
+            var filePath = folderPath + "/Config.json";
+            if (!File.Exists(filePath))
             {
-                Config = JsonConvert.DeserializeObject<Config>(configTxt.text);
+                Log.Info($"配置文件不存在：{filePath}");
+                return;
             }
+            
+            var config =  File.ReadAllText(filePath);
+            Config = JsonConvert.DeserializeObject<Config>(config);
         }
     }
 }

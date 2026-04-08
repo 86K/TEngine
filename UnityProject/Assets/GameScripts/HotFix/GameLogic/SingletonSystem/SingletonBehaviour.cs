@@ -44,6 +44,7 @@ namespace GameLogic
         /// </summary>
         public virtual void Initialize()
         {
+            Log.Info($"Initialize {typeof(T).Name}");
         }
 
         protected virtual void OnDestroy()

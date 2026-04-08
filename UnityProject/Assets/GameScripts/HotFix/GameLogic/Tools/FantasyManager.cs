@@ -1,7 +1,10 @@
 ﻿using Fantasy;
+using Fantasy.Async;
 using Fantasy.Event;
+using Fantasy.Network;
 using Fantasy.Timer;
 using UnityEngine;
+using Log = TEngine.Log;
 
 namespace GameLogic
 {
@@ -10,10 +13,8 @@ namespace GameLogic
     /// </summary>
     public class FantasyManager : SingletonBehaviour<FantasyManager>
     {
-        /// <summary>
-        /// 事件管理器。
-        /// </summary>
-        public EventComponent Event => Fantasy.Runtime.Scene.EventComponent;
+        public Scene Scene => Fantasy.Runtime.Scene;
+        public Session Session => Fantasy.Runtime.Session;
         
         /// <summary>
         /// 网络调度定时器。
@@ -24,6 +25,16 @@ namespace GameLogic
         /// Unity时间轮的调度定时器。
         /// </summary>
         public TimerSchedulerNetUnity UnitySchedulerTimer => Fantasy.Runtime.Scene.TimerComponent.Unity;
+        
+        /// <summary>
+        /// 事件组件。
+        /// </summary>
+        public EventComponent Event => Fantasy.Runtime.Scene.EventComponent;
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public CoroutineLockComponent CoroutineLock => Fantasy.Runtime.Scene.CoroutineLockComponent;
         
         public override void Initialize()
         {
@@ -37,9 +48,12 @@ namespace GameLogic
             fantasyRuntime.isRuntimeInstance = true;
             
             // 绑定服务端ip、port和协议类型
-            fantasyRuntime.remoteIP = "127.0.0.1";
-            fantasyRuntime.remotePort = 11001;
+            fantasyRuntime.remoteIP = GameManager.Config.remoteIp;
+            fantasyRuntime.remotePort = GameManager.Config.remotePort;
             fantasyRuntime.protocol = FantasyRuntime.NetworkProtocolType.KCP;
-        }
+            
+            // 注：通过FantasyRuntime去初始化框架和连接服务器需要一定的时间。
+            // 尽量在第一个界面显示出来之后去使用。
+        } 
     }
 }
