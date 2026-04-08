@@ -4,7 +4,6 @@ using Fantasy.Event;
 using Fantasy.Network;
 using Fantasy.Timer;
 using UnityEngine;
-using Log = TEngine.Log;
 
 namespace GameLogic
 {
