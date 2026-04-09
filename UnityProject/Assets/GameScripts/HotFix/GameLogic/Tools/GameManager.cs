@@ -35,6 +35,8 @@ namespace GameLogic
            
             // 初始化Fantasy管理器
             FantasyManager.Instance.Initialize();
+            // 初始化鼠标管理器
+            MouseManager.Instance.Initialize();
         }
 
         private void LoadConfig()

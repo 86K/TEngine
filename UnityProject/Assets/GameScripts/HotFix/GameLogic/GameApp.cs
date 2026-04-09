@@ -44,12 +44,15 @@ public partial class GameApp
         // GameModule.UI.ShowUIAsync<UILogin>();
         
         
-        // 测试
+        // 测试UILoading
         var testUILoading = new TestUILoading();
         testUILoading.StartLoading(() =>
         {
             GameModule.UI.ShowUIAsync<UILogin>();
         }).Forget();
+        
+        // 测试MouseManager
+        GameManager.Instance.gameObject.AddComponent<TestMouseManager>();
     }
     
     private static void Release()
