@@ -40,8 +40,16 @@ public partial class GameApp
         // 初始化项目
         GameManager.Instance.Initialize();
         
-        // NOTICE：打开第一个界面
-        GameModule.UI.ShowUIAsync<UILogin>();
+        // // NOTICE：打开第一个界面
+        // GameModule.UI.ShowUIAsync<UILogin>();
+        
+        
+        // 测试
+        var testUILoading = new TestUILoading();
+        testUILoading.StartLoading(() =>
+        {
+            GameModule.UI.ShowUIAsync<UILogin>();
+        }).Forget();
     }
     
     private static void Release()
