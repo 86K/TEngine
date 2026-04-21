@@ -83,9 +83,7 @@
         {
             base.Initialize();
 
-            mainCamera = Camera.main;
-            if (mainCamera == null)
-                Debug.LogError("MouseManager: 未找到主摄像机");
+            RefreshMainCamera();
 
             uiRaycastResults = new List<RaycastResult>();
             pointerEventData = new PointerEventData(EventSystem.current);
@@ -103,6 +101,11 @@
 
         private void Update()
         {
+            if (mainCamera == null || !mainCamera.isActiveAndEnabled)
+            {
+                RefreshMainCamera();
+            }
+
             Vector2 scrollDelta = Input.mouseScrollDelta;
             if (scrollDelta != Vector2.zero)
                 OnScroll.Invoke(scrollDelta);
@@ -124,6 +127,15 @@
             OnRightDrag = null;
             OnRightDragEnd = null;
             OnScroll = null;
+        }
+
+        private void RefreshMainCamera()
+        {
+            mainCamera = Camera.main;
+            if (mainCamera == null)
+            {
+                Debug.LogWarning("MouseManager: 当前场景未找到主摄像机");
+            }
         }
 
         private void ProcessButton(int button, ButtonState state)
@@ -243,7 +255,7 @@
                             );
 
                             state.PendingClickArgs = args;
-                            state.PendingClickCoroutine = StartCoroutine(DelayedClick(button, state, args));
+                            state.PendingClickCoroutine = StartCoroutine(DelayedClick(state, args));
                         }
                     }
                     else
@@ -261,7 +273,7 @@
             }
         }
 
-        private IEnumerator DelayedClick(int button, ButtonState state, MouseClickEventArgs args)
+        private IEnumerator DelayedClick(ButtonState state, MouseClickEventArgs args)
         {
             yield return new WaitForSeconds(doubleClickTime);
 
@@ -311,6 +323,11 @@
             }
 
             // 3D 物理检测
+            if (mainCamera == null)
+            {
+                return (MouseClickEventArgs.HitType.None, null, default, Vector3.zero);
+            }
+
             Ray ray = mainCamera.ScreenPointToRay(screenPosition);
             if (Physics.Raycast(ray, out RaycastHit hitInfo, maxRayDistance, raycastLayerMask))
             {

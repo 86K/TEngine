@@ -12,8 +12,12 @@ namespace GameLogic
         {
             base.OnCreate();
             
+            // NOTE：在第一个界面打开之后再去使用各种全局管理器。
             // 这个时候FantasyRuntime已经初始化框架了，可以使用它的Instance了
             Log.Info($"{Fantasy.Runtime.Session.RemoteEndPoint} ");
+            
+            // 测试MouseManager
+            GameManager.Instance.gameObject.AddComponent<TestMouseManager>();
         }
 
         protected override void OnUpdate()

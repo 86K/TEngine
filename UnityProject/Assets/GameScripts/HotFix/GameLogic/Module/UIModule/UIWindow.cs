@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using TEngine;
 using UnityEngine;
@@ -221,6 +222,7 @@ namespace GameLogic
         /// 是否加载完毕。
         /// </summary>
         internal bool IsLoadDone = false;
+        internal bool IsLoadSucceeded = false;
         
         /// <summary>
         /// UI是否销毁。
@@ -231,6 +233,8 @@ namespace GameLogic
         /// UI是否隐藏标志位。
         /// </summary>
         public bool IsHide { internal set; get; } = false;
+
+        private UniTaskCompletionSource<bool> _loadCompletionSource;
 
         #endregion
 
@@ -311,10 +315,11 @@ namespace GameLogic
             }
         }
 
-        internal async UniTaskVoid InternalLoad(string location, Action<UIWindow> prepareCallback, bool isAsync, System.Object[] userDatas)
+        internal async UniTask InternalLoad(string location, Action<UIWindow> prepareCallback, bool isAsync, System.Object[] userDatas)
         {
+            ResetLoadState();
             _prepareCallback = prepareCallback;
-            this._userDatas = userDatas;
+            _userDatas = userDatas;
             if (!FromResources)
             {
                 if (isAsync)
@@ -333,6 +338,34 @@ namespace GameLogic
                 GameObject panel = Object.Instantiate(Resources.Load<GameObject>(location), UIModule.UIRoot);
                 Handle_Completed(panel);
             }
+        }
+
+        internal async UniTask<bool> WaitForLoadAsync(CancellationToken cancellationToken = default)
+        {
+            if (_loadCompletionSource == null)
+            {
+                return IsPrepare && IsLoadSucceeded && !IsDestroyed;
+            }
+
+            bool loadCompleted = await _loadCompletionSource.Task.AttachExternalCancellation(cancellationToken);
+            return loadCompleted && IsPrepare && IsLoadSucceeded && !IsDestroyed;
+        }
+
+        private void ResetLoadState()
+        {
+            IsLoadDone = false;
+            IsLoadSucceeded = false;
+            IsDestroyed = false;
+            IsPrepare = false;
+            _loadCompletionSource = new UniTaskCompletionSource<bool>();
+        }
+
+        private void SetLoadFailed(string message)
+        {
+            IsLoadDone = true;
+            IsLoadSucceeded = false;
+            Log.Error(message);
+            _loadCompletionSource?.TrySetResult(false);
         }
 
         internal void InternalCreate()
@@ -450,6 +483,8 @@ namespace GameLogic
             }
             
             IsDestroyed = true;
+            IsLoadSucceeded = false;
+            _loadCompletionSource?.TrySetResult(false);
 
             if (!isShutDown)
             {
@@ -465,14 +500,17 @@ namespace GameLogic
         {
             if (panel == null)
             {
+                SetLoadFailed($"Load ui panel failed : {WindowName}");
                 return;
             }
 
             IsLoadDone = true;
+            IsLoadSucceeded = true;
             
             if (IsDestroyed)
             {
                 Object.Destroy(panel);
+                _loadCompletionSource?.TrySetResult(false);
                 return;
             }
             
@@ -499,6 +537,7 @@ namespace GameLogic
             // 通知UI管理器
             IsPrepare = true;
             _prepareCallback?.Invoke(this);
+            _loadCompletionSource?.TrySetResult(true);
         }
         
         protected virtual void Hide()

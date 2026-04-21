@@ -40,19 +40,15 @@ public partial class GameApp
         // 初始化项目
         GameManager.Instance.Initialize();
         
-        // // NOTICE：打开第一个界面
+        // 1.直接打开第一个界面
         // GameModule.UI.ShowUIAsync<UILogin>();
         
-        
-        // 测试UILoading
+        // 2.等待一些异步操作完成后，再打开第一个界面
         var testUILoading = new TestUILoading();
         testUILoading.StartLoading(() =>
         {
             GameModule.UI.ShowUIAsync<UILogin>();
         }).Forget();
-        
-        // 测试MouseManager
-        GameManager.Instance.gameObject.AddComponent<TestMouseManager>();
     }
     
     private static void Release()

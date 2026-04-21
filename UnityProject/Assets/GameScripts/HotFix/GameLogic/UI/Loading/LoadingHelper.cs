@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using TEngine;
 
 namespace GameLogic
 {
@@ -31,9 +32,13 @@ namespace GameLogic
             GameModule.UI.ShowUIAsync<UILoading>();
             
             var loadingUI = await GameModule.UI.GetUIAsyncAwait<UILoading>();
+            if (loadingUI == null)
+            {
+                throw new GameFrameworkException("UILoading load failed.");
+            }
 
             // 3. 创建进度报告器
-            var progress = new Progress<float>(p => loadingUI.SetProgress(p));
+            var progress = new Progress<float>(loadingUI.SetProgress);
 
             // 4. 顺序执行所有原子任务，并在每个任务完成后报告进度
             for (int i = 0; i < allAtomicTasks.Count; i++)

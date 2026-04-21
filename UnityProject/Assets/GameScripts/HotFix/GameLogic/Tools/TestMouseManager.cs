@@ -21,22 +21,25 @@ namespace GameLogic
             MouseManager.Instance.OnScroll.AddListener(HandleScroll);
         }
 
-        // private void OnDestroy()
-        // {
-        //     MouseManager.Instance.OnLeftClick.RemoveListener(HandleLeftClick);
-        //     MouseManager.Instance.OnLeftDoubleClick.RemoveListener(HandleLeftDoubleClick);
-        //
-        //     MouseManager.Instance.OnLeftDrag.RemoveListener(HandleLeftDrag);
-        //     MouseManager.Instance.OnLeftDragEnd.RemoveListener(HandleLeftDragEnd);
-        //
-        //     MouseManager.Instance.OnRightClick.RemoveListener(HandleRightClick);
-        //     MouseManager.Instance.OnRightDoubleClick.RemoveListener(HandleRightDoubleClick);
-        //
-        //     MouseManager.Instance.OnRightDrag.RemoveListener(HandleRightDrag);
-        //     MouseManager.Instance.OnRightDragEnd.RemoveListener(HandleRightDragEnd);
-        //     
-        //     MouseManager.Instance.OnScroll.RemoveListener(HandleScroll);
-        // }
+        private void OnDestroy()
+        {
+            if (MouseManager.Instance != null)
+            {
+                MouseManager.Instance.OnLeftClick.RemoveListener(HandleLeftClick);
+                MouseManager.Instance.OnLeftDoubleClick.RemoveListener(HandleLeftDoubleClick);
+
+                MouseManager.Instance.OnLeftDrag.RemoveListener(HandleLeftDrag);
+                MouseManager.Instance.OnLeftDragEnd.RemoveListener(HandleLeftDragEnd);
+
+                MouseManager.Instance.OnRightClick.RemoveListener(HandleRightClick);
+                MouseManager.Instance.OnRightDoubleClick.RemoveListener(HandleRightDoubleClick);
+
+                MouseManager.Instance.OnRightDrag.RemoveListener(HandleRightDrag);
+                MouseManager.Instance.OnRightDragEnd.RemoveListener(HandleRightDragEnd);
+            
+                MouseManager.Instance.OnScroll.RemoveListener(HandleScroll);
+            }
+        }
 
         private void HandleLeftClick(MouseClickEventArgs args)
         {

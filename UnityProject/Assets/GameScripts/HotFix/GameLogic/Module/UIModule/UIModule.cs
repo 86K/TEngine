@@ -343,24 +343,16 @@ namespace GameLogic
 
             if (TryGetWindow(windowName, out UIWindow window, userDatas))
             {
-                return window as T;
+                bool loaded = await window.WaitForLoadAsync();
+                return loaded ? window as T : null;
             }
             else
             {
                 window = CreateInstance<T>();
                 Push(window); //首次压入
-                window.InternalLoad(window.AssetName, OnWindowPrepare, isAsync, userDatas).Forget();
-                float time = 0f;
-                while (!window.IsLoadDone)
-                {
-                    time += Time.deltaTime;
-                    if (time > 60f)
-                    {
-                        break;
-                    }
-                    await UniTask.Yield();
-                }
-                return window as T;
+                await window.InternalLoad(window.AssetName, OnWindowPrepare, isAsync, userDatas);
+                bool loaded = await window.WaitForLoadAsync();
+                return loaded ? window as T : null;
             }
         }
 
@@ -581,20 +573,11 @@ namespace GameLogic
 
             if (ret.IsLoadDone)
             {
-                return ret;
+                return ret.IsLoadSucceeded && ret.IsPrepare ? ret : null;
             }
 
-            float time = 0f;
-            while (!ret.IsLoadDone)
-            {
-                time += Time.deltaTime;
-                if (time > 60f)
-                {
-                    break;
-                }
-                await UniTask.Yield(cancellationToken: cancellationToken);
-            }
-            return ret;
+            bool loaded = await ret.WaitForLoadAsync(cancellationToken);
+            return loaded ? ret : null;
         }
 
         /// <summary>
@@ -622,17 +605,8 @@ namespace GameLogic
 
             async UniTaskVoid GetUIAsyncImp(Action<T> ctx)
             {
-                float time = 0f;
-                while (!ret.IsLoadDone)
-                {
-                    time += Time.deltaTime;
-                    if (time > 60f)
-                    {
-                        break;
-                    }
-                    await UniTask.Yield();
-                }
-                ctx?.Invoke(ret);
+                bool loaded = await ret.WaitForLoadAsync();
+                ctx?.Invoke(loaded ? ret : null);
             }
         }
 

@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
 using TEngine;
 using UnityEngine;
@@ -29,17 +30,22 @@ namespace GameLogic
         public override void Initialize()
         {
             base.Initialize();
-            
-            // 加载项目配置
-            LoadConfig();
-           
+
+            InitializeAsync().Forget();
+        }
+
+        private async UniTaskVoid InitializeAsync()
+        {
+            await LoadConfigAsync();
+
+            // NOTE：再这里对所有的全局管理器进行初始化，不需要手动挂载到main中。
             // 初始化Fantasy管理器
             FantasyManager.Instance.Initialize();
             // 初始化鼠标管理器
             MouseManager.Instance.Initialize();
         }
 
-        private void LoadConfig()
+        private async UniTask LoadConfigAsync()
         {
             var folderPath = Application.streamingAssetsPath + "/Configs";
             if (!Directory.Exists(folderPath))
@@ -55,8 +61,12 @@ namespace GameLogic
                 return;
             }
             
-            var config =  File.ReadAllText(filePath);
-            Config = JsonConvert.DeserializeObject<Config>(config);
+            var configText = await UniTask.RunOnThreadPool(() => File.ReadAllText(filePath));
+            var config = JsonConvert.DeserializeObject<Config>(configText);
+            if (config != null)
+            {
+                Config = config;
+            }
         }
     }
 }
