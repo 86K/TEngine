@@ -13,6 +13,8 @@ namespace GameLogic
     {
         public string remoteIp;
         public int remotePort;
+        
+        // 其他配置字段...
     }
     
     /// <summary>

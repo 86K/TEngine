@@ -79,6 +79,8 @@
         private List<RaycastResult> uiRaycastResults;
         private Camera mainCamera;
 
+        public bool IsEnabled { get; private set; } = true;
+
         public override void Initialize()
         {
             base.Initialize();
@@ -101,6 +103,8 @@
 
         private void Update()
         {
+            if (!IsEnabled) return;
+
             if (mainCamera == null || !mainCamera.isActiveAndEnabled)
             {
                 RefreshMainCamera();
@@ -127,6 +131,43 @@
             OnRightDrag = null;
             OnRightDragEnd = null;
             OnScroll = null;
+        }
+
+        /// <summary>
+        /// 启用监听鼠标事件。
+        /// </summary>
+        public void Enable()
+        {
+            IsEnabled = true;
+        }
+
+        /// <summary>
+        /// 关闭监听鼠标事件。
+        /// </summary>
+        public void Disable()
+        {
+            IsEnabled = false;
+            CancelButtonState(leftState);
+            CancelButtonState(rightState);
+        }
+
+        private void CancelButtonState(ButtonState state)
+        {
+            if (state.PendingClickCoroutine != null)
+            {
+                StopCoroutine(state.PendingClickCoroutine);
+                state.PendingClickCoroutine = null;
+            }
+            if (state.IsDragging)
+            {
+                if (state == leftState)
+                    OnLeftDragEnd?.Invoke();
+                else
+                    OnRightDragEnd?.Invoke();
+            }
+            state.IsPressed = false;
+            state.IsDragging = false;
+            state.PendingClickArgs = null;
         }
 
         private void RefreshMainCamera()
