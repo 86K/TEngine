@@ -21,6 +21,7 @@ namespace GameLogic
 		private TMP_InputField m_tmpInputAccount = null!;
 		private TMP_InputField m_tmpInputPassword = null!;
 		private Button m_btnLogin = null!;
+		private Button m_btnSignout = null!;
 
 		protected override void ScriptGenerator()
 		{
@@ -33,8 +34,11 @@ namespace GameLogic
 			m_tmpInputAccount = m_bindComponent.GetComponent<TMP_InputField>(0);
 			m_tmpInputPassword = m_bindComponent.GetComponent<TMP_InputField>(1);
 			m_btnLogin = m_bindComponent.GetComponent<Button>(2);
+			m_btnSignout = m_bindComponent.GetComponent<Button>(3);
 			m_btnLogin.onClick.RemoveAllListeners();
 			m_btnLogin.onClick.AddListener(UniTask.UnityAction(OnClickLoginBtn));
+			m_btnSignout.onClick.RemoveAllListeners();
+			m_btnSignout.onClick.AddListener(UniTask.UnityAction(OnClickSignoutBtn));
 		}
 
 		#endregion
@@ -42,6 +46,8 @@ namespace GameLogic
 		#region 事件
 
 		private partial UniTaskVoid OnClickLoginBtn();
+
+		private partial UniTaskVoid OnClickSignoutBtn();
 
 		#endregion
 	}

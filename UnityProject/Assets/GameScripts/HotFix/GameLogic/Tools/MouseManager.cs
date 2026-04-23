@@ -1,4 +1,6 @@
-﻿namespace GameLogic
+﻿using UnityEngine.Serialization;
+
+namespace GameLogic
 {
     using System;
     using System.Collections;
@@ -45,15 +47,15 @@
         [SerializeField] private float maxRayDistance = 1000f;
 
         // 事件
-        public UnityEvent<MouseClickEventArgs> OnLeftClick;
-        public UnityEvent<MouseClickEventArgs> OnRightClick;
-        public UnityEvent<MouseClickEventArgs> OnLeftDoubleClick;
-        public UnityEvent<MouseClickEventArgs> OnRightDoubleClick;
-        public UnityEvent<Vector2> OnScroll;
-        public UnityEvent<Vector2> OnLeftDrag;
-        public UnityEvent<Vector2> OnRightDrag;
-        public UnityEvent OnLeftDragEnd;
-        public UnityEvent OnRightDragEnd;
+        [HideInInspector] public UnityEvent<MouseClickEventArgs> onLeftClick;
+        [HideInInspector] public UnityEvent<MouseClickEventArgs> onRightClick;
+        [HideInInspector] public UnityEvent<MouseClickEventArgs> onLeftDoubleClick;
+        [HideInInspector] public UnityEvent<MouseClickEventArgs> onRightDoubleClick;
+        [HideInInspector] public UnityEvent<Vector2> onScroll;
+        [HideInInspector] public UnityEvent<Vector2> onLeftDrag;
+        [HideInInspector] public UnityEvent<Vector2> onRightDrag;
+        [HideInInspector] public UnityEvent onLeftDragEnd;
+        [HideInInspector] public UnityEvent onRightDragEnd;
 
         private class ButtonState
         {
@@ -72,12 +74,12 @@
             public MouseClickEventArgs PendingClickArgs;
         }
 
-        private ButtonState leftState = new ButtonState();
-        private ButtonState rightState = new ButtonState();
+        private readonly ButtonState _leftState = new ButtonState();
+        private readonly ButtonState _rightState = new ButtonState();
 
-        private PointerEventData pointerEventData;
-        private List<RaycastResult> uiRaycastResults;
-        private Camera mainCamera;
+        private PointerEventData _pointerEventData;
+        private List<RaycastResult> _uiRaycastResults;
+        private Camera _mainCamera;
 
         public bool IsEnabled { get; private set; } = true;
 
@@ -87,50 +89,50 @@
 
             RefreshMainCamera();
 
-            uiRaycastResults = new List<RaycastResult>();
-            pointerEventData = new PointerEventData(EventSystem.current);
+            _uiRaycastResults = new List<RaycastResult>();
+            _pointerEventData = new PointerEventData(EventSystem.current);
 
-            OnLeftClick ??= new UnityEvent<MouseClickEventArgs>();
-            OnRightClick ??= new UnityEvent<MouseClickEventArgs>();
-            OnLeftDoubleClick ??= new UnityEvent<MouseClickEventArgs>();
-            OnRightDoubleClick ??= new UnityEvent<MouseClickEventArgs>();
-            OnScroll ??= new UnityEvent<Vector2>();
-            OnLeftDrag ??= new UnityEvent<Vector2>();
-            OnRightDrag ??= new UnityEvent<Vector2>();
-            OnLeftDragEnd ??= new UnityEvent();
-            OnRightDragEnd ??= new UnityEvent();
+            onLeftClick ??= new UnityEvent<MouseClickEventArgs>();
+            onRightClick ??= new UnityEvent<MouseClickEventArgs>();
+            onLeftDoubleClick ??= new UnityEvent<MouseClickEventArgs>();
+            onRightDoubleClick ??= new UnityEvent<MouseClickEventArgs>();
+            onScroll ??= new UnityEvent<Vector2>();
+            onLeftDrag ??= new UnityEvent<Vector2>();
+            onRightDrag ??= new UnityEvent<Vector2>();
+            onLeftDragEnd ??= new UnityEvent();
+            onRightDragEnd ??= new UnityEvent();
         }
 
         private void Update()
         {
             if (!IsEnabled) return;
 
-            if (mainCamera == null || !mainCamera.isActiveAndEnabled)
+            if (_mainCamera == null || !_mainCamera.isActiveAndEnabled)
             {
                 RefreshMainCamera();
             }
 
             Vector2 scrollDelta = Input.mouseScrollDelta;
             if (scrollDelta != Vector2.zero)
-                OnScroll.Invoke(scrollDelta);
+                onScroll.Invoke(scrollDelta);
 
-            ProcessButton(0, leftState);
-            ProcessButton(1, rightState);
+            ProcessButton(0, _leftState);
+            ProcessButton(1, _rightState);
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
-
-            OnLeftClick = null;
-            OnLeftDoubleClick = null;
-            OnRightClick = null;
-            OnRightDoubleClick = null;
-            OnLeftDrag = null;
-            OnLeftDragEnd = null;
-            OnRightDrag = null;
-            OnRightDragEnd = null;
-            OnScroll = null;
+        
+            onLeftClick = null;
+            onLeftDoubleClick = null;
+            onRightClick = null;
+            onRightDoubleClick = null;
+            onLeftDrag = null;
+            onLeftDragEnd = null;
+            onRightDrag = null;
+            onRightDragEnd = null;
+            onScroll = null;
         }
 
         /// <summary>
@@ -147,8 +149,8 @@
         public void Disable()
         {
             IsEnabled = false;
-            CancelButtonState(leftState);
-            CancelButtonState(rightState);
+            CancelButtonState(_leftState);
+            CancelButtonState(_rightState);
         }
 
         private void CancelButtonState(ButtonState state)
@@ -160,10 +162,10 @@
             }
             if (state.IsDragging)
             {
-                if (state == leftState)
-                    OnLeftDragEnd?.Invoke();
+                if (state == _leftState)
+                    onLeftDragEnd?.Invoke();
                 else
-                    OnRightDragEnd?.Invoke();
+                    onRightDragEnd?.Invoke();
             }
             state.IsPressed = false;
             state.IsDragging = false;
@@ -172,8 +174,8 @@
 
         private void RefreshMainCamera()
         {
-            mainCamera = Camera.main;
-            if (mainCamera == null)
+            _mainCamera = Camera.main;
+            if (_mainCamera == null)
             {
                 Debug.LogWarning("MouseManager: 当前场景未找到主摄像机");
             }
@@ -220,9 +222,9 @@
                     );
 
                     if (button == 0)
-                        OnLeftDoubleClick.Invoke(args);
+                        onLeftDoubleClick.Invoke(args);
                     else
-                        OnRightDoubleClick.Invoke(args);
+                        onRightDoubleClick.Invoke(args);
 
                     // 重置双击状态，防止后续单击干扰
                     state.LastClickTime = 0f;
@@ -265,9 +267,9 @@
                     if (state.IsDragging && delta != Vector2.zero)
                     {
                         if (button == 0)
-                            OnLeftDrag.Invoke(delta);
+                            onLeftDrag.Invoke(delta);
                         else
-                            OnRightDrag.Invoke(delta);
+                            onRightDrag.Invoke(delta);
                     }
 
                     state.LastMousePosition = currentMousePos;
@@ -303,9 +305,9 @@
                     {
                         // 拖拽结束
                         if (button == 0)
-                            OnLeftDragEnd.Invoke();
+                            onLeftDragEnd.Invoke();
                         else
-                            OnRightDragEnd.Invoke();
+                            onRightDragEnd.Invoke();
                     }
                 }
 
@@ -332,16 +334,16 @@
             if (isDoubleClick)
             {
                 if (args.Button == 0)
-                    OnLeftDoubleClick.Invoke(args);
+                    onLeftDoubleClick.Invoke(args);
                 else
-                    OnRightDoubleClick.Invoke(args);
+                    onRightDoubleClick.Invoke(args);
             }
             else
             {
                 if (args.Button == 0)
-                    OnLeftClick.Invoke(args);
+                    onLeftClick.Invoke(args);
                 else
-                    OnRightClick.Invoke(args);
+                    onRightClick.Invoke(args);
             }
         }
 
@@ -351,25 +353,25 @@
             // UI 检测
             if (EventSystem.current != null)
             {
-                pointerEventData.position = screenPosition;
-                uiRaycastResults.Clear();
-                EventSystem.current.RaycastAll(pointerEventData, uiRaycastResults);
+                _pointerEventData.position = screenPosition;
+                _uiRaycastResults.Clear();
+                EventSystem.current.RaycastAll(_pointerEventData, _uiRaycastResults);
 
-                if (uiRaycastResults.Count > 0)
+                if (_uiRaycastResults.Count > 0)
                 {
-                    GameObject uiObj = uiRaycastResults[0].gameObject;
+                    GameObject uiObj = _uiRaycastResults[0].gameObject;
                     Vector3 worldPos = uiObj.transform.position;
                     return (MouseClickEventArgs.HitType.UI, uiObj, default, worldPos);
                 }
             }
 
             // 3D 物理检测
-            if (mainCamera == null)
+            if (_mainCamera == null)
             {
                 return (MouseClickEventArgs.HitType.None, null, default, Vector3.zero);
             }
 
-            Ray ray = mainCamera.ScreenPointToRay(screenPosition);
+            Ray ray = _mainCamera.ScreenPointToRay(screenPosition);
             if (Physics.Raycast(ray, out RaycastHit hitInfo, maxRayDistance, raycastLayerMask))
             {
                 return (MouseClickEventArgs.HitType.Collider, hitInfo.collider.gameObject, hitInfo, hitInfo.point);

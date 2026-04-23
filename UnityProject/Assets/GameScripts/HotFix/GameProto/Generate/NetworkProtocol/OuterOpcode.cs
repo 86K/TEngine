@@ -8,5 +8,6 @@ namespace Fantasy
     {
         public const uint C2G_LoginRequest = 268445457;
         public const uint G2C_LoginResponse = 402663185;
+        public const uint C2G_SignoutMessage = 134227729;
     }
 }

@@ -50,10 +50,34 @@ namespace GameLogic
             }
             
             var loginResponse = await FantasyManager.Instance.Session.C2G_LoginRequest(account, password);
-            Log.Info($"登陆结果，code：{loginResponse.code} result：{loginResponse.result}  id：{loginResponse.userId}");
+
+            switch (loginResponse.code)
+            {
+                case "200":
+                    Log.Info($"登录成功");
+                    UserInfo userInfo = new UserInfo()
+                    {
+                        account = account,
+                        password = password,
+                        userId = loginResponse.userId
+                    };
+                    UserManager.Instance.RecordUserInfo(userInfo);
+                    break;
+                
+                default:
+                    Log.Info($"登录失败：{loginResponse.result}");
+                    break;
+            }
+            
 			await UniTask.Yield();
 		}
 
+        private async partial UniTaskVoid OnClickSignoutBtn()
+        {
+            UserManager.Instance.SignOut();
+            await UniTask.Yield();
+        }
+        
 		#endregion
 	}
 }

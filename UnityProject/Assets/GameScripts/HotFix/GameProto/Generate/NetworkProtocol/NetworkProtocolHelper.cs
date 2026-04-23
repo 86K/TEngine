@@ -21,6 +21,18 @@ namespace Fantasy
 			C2G_LoginRequest_request.password = password;
 			return (G2C_LoginResponse)await session.Call(C2G_LoginRequest_request);
 		}
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static void C2G_SignoutMessage(this Session session, C2G_SignoutMessage C2G_SignoutMessage_message)
+		{
+			session.Send(C2G_SignoutMessage_message);
+		}
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static void C2G_SignoutMessage(this Session session, long userId)
+		{
+			using var C2G_SignoutMessage_message = Fantasy.C2G_SignoutMessage.Create();
+			C2G_SignoutMessage_message.userId = userId;
+			session.Send(C2G_SignoutMessage_message);
+		}
 
    }
 }
