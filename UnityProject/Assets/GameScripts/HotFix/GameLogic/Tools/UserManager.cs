@@ -1,6 +1,5 @@
 ﻿using Fantasy;
 using UnityEditor;
-using UnityEngine;
 
 namespace GameLogic
 {

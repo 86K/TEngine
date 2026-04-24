@@ -3,12 +3,13 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace GameLogic.UI
+namespace GameLogic
 {
     /// <summary>
     /// 底图自适应文字内容。
     /// </summary>
     [RequireComponent(typeof(Image))]
+    [AddComponentMenu("Extensions/UI/Image Adapts Text Size")]
     public class ImageAdaptsTextSize : MonoBehaviour
     {
         [SerializeField] private Image _image;
