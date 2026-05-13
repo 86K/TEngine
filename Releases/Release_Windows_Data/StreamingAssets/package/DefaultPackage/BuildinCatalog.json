@@ -1,0 +1,59 @@
+{
+    "FileVersion": "1.0.0",
+    "PackageName": "DefaultPackage",
+    "PackageVersion": "2026-04-24-853",
+    "Wrappers": [
+        {
+            "BundleGUID": "523b31adf8fe6a40e5f97e2068791a1f",
+            "FileName": "defaultpackage_assets_assetraw_actor.bundle"
+        },
+        {
+            "BundleGUID": "ecc304c3014702487ec57906d7633bfc",
+            "FileName": "defaultpackage_assets_assetraw_configs.bundle"
+        },
+        {
+            "BundleGUID": "03978b27bb9ec99633b55289adc9f524",
+            "FileName": "defaultpackage_assets_assetraw_dll.bundle"
+        },
+        {
+            "BundleGUID": "f422e326d3d9c66aa5895c5fe2bbfedc",
+            "FileName": "defaultpackage_assets_assetraw_scenes.bundle"
+        },
+        {
+            "BundleGUID": "33151412e8f37de9fc0a4daf8faf72fe",
+            "FileName": "defaultpackage_assets_assetraw_uiraw_atlas_battle.bundle"
+        },
+        {
+            "BundleGUID": "9a128f1186716c64378413a7b1a7e7c6",
+            "FileName": "defaultpackage_assets_assetraw_ui_uiloading.bundle"
+        },
+        {
+            "BundleGUID": "f1f5828037fe2501bc9c1112830b9112",
+            "FileName": "defaultpackage_assets_assetraw_ui_uilogin.bundle"
+        },
+        {
+            "BundleGUID": "a9ccb4db6c7dda957ecc0497d148e599",
+            "FileName": "defaultpackage_assets_assetraw_ui_uitemplate.bundle"
+        },
+        {
+            "BundleGUID": "f5acc1ec8e80c243a55ff4ae6f6b1ce1",
+            "FileName": "defaultpackage_assets_assetraw_ui_uitip.bundle"
+        },
+        {
+            "BundleGUID": "6dbae12fb5f6e681010756c5943141ca",
+            "FileName": "defaultpackage_share_assets_assetart_fonts.bundle"
+        },
+        {
+            "BundleGUID": "eda5fb8807984911172c9d8608235a0c",
+            "FileName": "defaultpackage_share_assets_textmesh_pro_fonts.bundle"
+        },
+        {
+            "BundleGUID": "3454082b8fb8a1a28a0d68f8044988ee",
+            "FileName": "defaultpackage_share_assets_textmesh_pro_resources_fonts_&_materials.bundle"
+        },
+        {
+            "BundleGUID": "3bf50fb02848deccffb48934890a51d8",
+            "FileName": "defaultpackage_unityshaders.bundle"
+        }
+    ]
+}

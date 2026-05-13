@@ -1,5 +1,4 @@
 ﻿using Fantasy;
-using UnityEditor;
 
 namespace GameLogic
 {
@@ -41,9 +40,9 @@ namespace GameLogic
             }
             
 #if UNITY_EDITOR
-            EditorApplication.isPlaying = false;
+            UnityEditor.EditorApplication.isPlaying = false;
 #else
-            Application.Quit();
+            UnityEngine.Application.Quit();
 #endif
         }
     }
