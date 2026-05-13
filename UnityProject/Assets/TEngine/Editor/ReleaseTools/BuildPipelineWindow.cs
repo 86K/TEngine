@@ -61,7 +61,7 @@ namespace TEngine
         private static readonly string[] FileNameStyleNames = new string[]
         {
             "HashName (哈希名)",
-            "BundleNam (资源包名称)",
+            "BundleName (资源包名称)",
             "BundleName_HashName (资源包名称 + 哈希值名称)",
         };
 
