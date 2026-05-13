@@ -422,7 +422,7 @@ namespace TEngine
             BuildSummary summary = report.summary;
             if (summary.result == BuildResult.Succeeded)
             {
-                Debug.Log($"Build success: {summary.totalSize / 1024 / 1024} MB");
+                Debug.Log($"Build success: {summary.totalSize / 1024 / 1024} MB, {summary.outputPath}");
             }
             else
             {
